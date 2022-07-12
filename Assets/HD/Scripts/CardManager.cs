@@ -22,15 +22,19 @@ public class CardManager : TSingletonMonoBehavior<CardManager>
     }
 
     public void CreateCard(int cardType){
-        printCard(cardType);
+        printCard(cardType);         
     }
     
     void printCard(int cardType){
-        if(cardType == 0){
+        if(cardType == 0){            
             GameObject cardNPC = ObjectPool.Instance.GetForwardPooledObject();
-            cardNPC.transform.parent = container.transform;
-            cardNPC.SetActive(true);           
-            Debug.Log(cardNPC);
+            if(cardNPC == null){
+                Debug.Log("生成有問題");                
+            }else{
+                cardNPC.transform.parent = container.transform;
+                cardNPC.SetActive(true);              
+            }
+            
         }else if(cardType == 1){
             GameObject cardNPC = ObjectPool.Instance.GetBackPooledObject();
             cardNPC.transform.parent = container.transform;

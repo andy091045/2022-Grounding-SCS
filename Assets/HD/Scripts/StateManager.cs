@@ -13,6 +13,7 @@ public enum StateDef
 }
 
 public class StateManager : TSingletonMonoBehavior<StateManager>{
+    public bool DestroyCard = false; 
     //判斷是否有按按鈕
     public bool ButtonClick = false;
     //判斷玩家是否完成移動
@@ -96,13 +97,15 @@ public class ChooseCard:IState{
         for (int i = 0; i < StateManager.Instance.cardNumber; i++)
         {
             //隨機生成上or下or左or右
-            int cardType = Random.Range(0,3);   
+            int cardType = Random.Range(0,3); 
+            //int cardType = 0;
             CardManager.Instance.CreateCard(cardType);
         }
               
 	}
 
 	public virtual void OnUpdate(){
+        
         //如果點選卡牌的話           
         if(StateManager.Instance.ButtonClick){
             if(PlayerManager.Instance.cardType == 0 ){ 
@@ -117,13 +120,16 @@ public class ChooseCard:IState{
             }else if(PlayerManager.Instance.cardType == 3 ){ 
                 StateManager.Instance.way = "Left";           
                 StateManager.Instance.TransitionState(StateDef.playerMove);           
-            }
+            }                   
         }    
               
     }
 
 	public virtual void OnExit(){
+        Debug.Log("離開卡牌生成事件");
+        StateManager.Instance.ButtonClick = false;
         //其他選擇卡牌破壞
+        //StateManager.Instance.DestroyCard = true;
     }
 }
 
@@ -137,7 +143,7 @@ public class PlayerMove:IState{
 
 	public virtual void OnEnter(){
 		//角色進行移動
-        Debug.Log("進入角色移動事件");
+        Debug.Log("進入移動事件");
         //角色移動完成 所以 bool moveComplete = true; 
         if(!StateManager.Instance.moveComplete){
             if(StateManager.Instance.way == "Forward"){
@@ -159,14 +165,22 @@ public class PlayerMove:IState{
 
 	public virtual void OnUpdate(){
         //如果 moveComplete == true 進行到Encounter State
-        if(PlayerManager.Instance.triggerEnemy == true){
-            StateManager.Instance.TransitionState(StateDef.encounter);
-            
+        if(PlayerManager.Instance.triggerType == 1 || PlayerManager.Instance.triggerType == 2 ||PlayerManager.Instance.triggerType == 3){
+            StateManager.Instance.TransitionState(StateDef.encounter);            
         }
+
+        if(StateManager.Instance.moveComplete == true){
+            Debug.Log("回到選擇卡牌");
+            StateManager.Instance.moveComplete = false;
+            StateManager.Instance.TransitionState(StateDef.chooseCard);
+        }    
     }
 
 	public virtual void OnExit(){
+        Debug.Log("離開移動事件");
+        //StateManager.Instance.TransitionState(StateDef.chooseCard);
         //moveComplete = false;
+        //StateManager.Instance.moveComplete = false;
     }
 }
 

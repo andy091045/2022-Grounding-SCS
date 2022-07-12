@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -9190661788309576610}
   m_Layer: 0
   m_Name: Monster
-  m_TagString: ITEM
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7151784811155729841}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.645873, y: 14.327388, z: 24.167934}
-  m_LocalScale: {x: 3.9739, y: 3.9739, z: 3.9739}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0

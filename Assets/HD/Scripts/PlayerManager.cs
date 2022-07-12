@@ -7,7 +7,8 @@ public class PlayerManager : TSingletonMonoBehavior<PlayerManager>
 {    
     
     public int cardType = 0;
-    public bool triggerEnemy = false;
+    //觸發的四種事件: 沒觸發事件、遭遇敵人、遭遇寶箱、遭遇隨機事件
+    public int triggerType = 0;
     public float PlayerSpeed = 0.02f;
     public float PlayerMoveTime = 0.5f;
     string beforeWay = "Forward";
@@ -195,8 +196,14 @@ public class PlayerManager : TSingletonMonoBehavior<PlayerManager>
 
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "enemy"){
-            triggerEnemy = true;
+            triggerType = 1;
             Debug.Log("遭遇敵人!");
+        }else if(other.tag == "event"){
+            triggerType = 2;
+            Debug.Log("隨機事件!");
+        }else if(other.tag == "box"){
+            triggerType = 3;
+            Debug.Log("遭遇寶箱!");
         }
     }
 }
