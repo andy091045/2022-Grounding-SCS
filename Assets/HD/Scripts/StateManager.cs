@@ -9,7 +9,7 @@ public enum StateDef
     idle,
 	chooseCard,
 	playerMove,
-    encounter
+    encounter,
 }
 
 public class StateManager : TSingletonMonoBehavior<StateManager>{
@@ -256,6 +256,7 @@ public class Encounter:IState{
 
 	public virtual void OnExit(){
         StateManager.Instance.eventComplete = false;
+        PlayerManager.Instance.triggerType = 0;
     }
 }
 

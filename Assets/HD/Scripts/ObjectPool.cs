@@ -26,12 +26,10 @@ public class ObjectPool : TSingletonMonoBehavior<ObjectPool>
 
     public GameObject GetForwardPooledObject(){
         
-        for ( int i = 0; i < amountToPool; i++ ) {
-            Debug.Log("進入迴圈");            
+        for ( int i = 0; i < amountToPool; i++ ) {                       
             //Use it if you are not using it
             if(ForwardPooledObjects[i] && !ForwardPooledObjects[i].activeInHierarchy){
-                Debug.Log(i);                
-                return ForwardPooledObjects[i];
+               return ForwardPooledObjects[i];
             }
         }
         return null;
