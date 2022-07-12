@@ -13,11 +13,18 @@ public enum StateDef
 }
 
 public class StateManager : TSingletonMonoBehavior<StateManager>{
+    //玩家的總回和數
+    public int level = 20;
     public bool DestroyCard = false; 
+
+
     //判斷是否有按按鈕
     public bool ButtonClick = false;
     //判斷玩家是否完成移動
     public bool moveComplete = false;
+    //判斷事件是否結束
+    public bool eventComplete = false;
+
     //玩家即將前進的方向
     public string way;
     //卡牌生成最左邊位置
@@ -90,6 +97,10 @@ public class ChooseCard:IState{
     } 
 
 	public virtual void OnEnter(){
+        StateManager.Instance.level -= 1;
+        if( StateManager.Instance.level == 0){
+            Debug.Log("GameOver !");
+        }
 		//卡牌飛入動畫
         Debug.Log("進入卡牌生成事件");
         //生成5張卡牌
@@ -121,7 +132,11 @@ public class ChooseCard:IState{
                 StateManager.Instance.way = "Left";           
                 StateManager.Instance.TransitionState(StateDef.playerMove);           
             }                   
-        }    
+        } 
+
+        if(PlayerManager.Instance.triggerType == 1 || PlayerManager.Instance.triggerType == 2 ||PlayerManager.Instance.triggerType == 3 ||PlayerManager.Instance.triggerType == 4||PlayerManager.Instance.triggerType == 5||PlayerManager.Instance.triggerType == 6){
+            StateManager.Instance.TransitionState(StateDef.encounter);            
+        }   
               
     }
 
@@ -165,18 +180,18 @@ public class PlayerMove:IState{
 
 	public virtual void OnUpdate(){
         //如果 moveComplete == true 進行到Encounter State
-        if(PlayerManager.Instance.triggerType == 1 || PlayerManager.Instance.triggerType == 2 ||PlayerManager.Instance.triggerType == 3){
+        if(PlayerManager.Instance.triggerType == 1 || PlayerManager.Instance.triggerType == 2 ||PlayerManager.Instance.triggerType == 3 ||PlayerManager.Instance.triggerType == 4||PlayerManager.Instance.triggerType == 5||PlayerManager.Instance.triggerType == 6){
             StateManager.Instance.TransitionState(StateDef.encounter);            
         }
 
         if(StateManager.Instance.moveComplete == true){
-            Debug.Log("回到選擇卡牌");
-            StateManager.Instance.moveComplete = false;
+            Debug.Log("回到選擇卡牌");            
             StateManager.Instance.TransitionState(StateDef.chooseCard);
         }    
     }
 
 	public virtual void OnExit(){
+        StateManager.Instance.moveComplete = false;
         Debug.Log("離開移動事件");
         //StateManager.Instance.TransitionState(StateDef.chooseCard);
         //moveComplete = false;
@@ -196,20 +211,54 @@ public class Encounter:IState{
         Debug.Log("進入事件");
 		//判斷是否有觸發事件
         //如果碰到隨機事件
-
-        //如果碰到敵人遭遇戰
-
-        //如果碰到寶箱        
+        if(PlayerManager.Instance.triggerType == 1){
+            int decreaseHp = Random.Range(15,30);
+            PlayerManager.Instance.hp -= decreaseHp;
+            PlayerManager.Instance.atk += PlayerManager.Instance.addAtk;
+            StateManager.Instance.eventComplete = true;
+        }
+        //如果碰到寶箱寶劍
+        if(PlayerManager.Instance.triggerType == 2){            
+            PlayerManager.Instance.atk += (PlayerManager.Instance.addAtk * 3);
+            StateManager.Instance.eventComplete = true;
+        }
+        //如果碰到寶箱盾牌
+        if(PlayerManager.Instance.triggerType == 3){            
+            PlayerManager.Instance.def += PlayerManager.Instance.addDef;
+            StateManager.Instance.eventComplete = true;
+        }
+        //如果碰到隱藏事件1  
+        if(PlayerManager.Instance.triggerType == 4){            
+            PlayerManager.Instance.hp += PlayerManager.Instance.addHp;
+            StateManager.Instance.eventComplete = true;
+        } 
+        //如果碰到隱藏事件2  
+        if(PlayerManager.Instance.triggerType == 5){            
+            int decreaseHp = Random.Range(15,30);
+            PlayerManager.Instance.hp -= decreaseHp;
+            StateManager.Instance.eventComplete = true;
+        }
+        //如果碰到隱藏事件3 尚未做 
+        if(PlayerManager.Instance.triggerType == 6){   
+            StateManager.Instance.eventComplete = true;         
+            //int decreaseHp = Random.Range(15,30);
+            //PlayerManager.Instance.hp -= decreaseHp;
+        }     
 	}
 
 	public virtual void OnUpdate(){
         //如果事件動畫執行完畢 回到 ChooseCard State
+        if(StateManager.Instance.eventComplete){
+            Debug.Log("事件回到選擇卡片");
+            StateManager.Instance.TransitionState(StateDef.chooseCard);
+        }
     }
 
 	public virtual void OnExit(){
-
+        StateManager.Instance.eventComplete = false;
     }
 }
+
 
 /*
 [System.Serializeable]

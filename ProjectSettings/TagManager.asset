@@ -5,6 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - enemy
+  - ITEM
+  - _ground
+  - sword
+  - shield
+  - event1
+  - event2
+  - event3
   layers:
   - Default
   - TransparentFX

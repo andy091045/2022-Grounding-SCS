@@ -5,7 +5,14 @@ using HD.Singleton;
 
 public class PlayerManager : TSingletonMonoBehavior<PlayerManager>
 {    
-    
+    public int hp = 100;
+    public int atk = 20;
+    public int def = 15;
+
+    public int addAtk = 5;
+    public int addDef = 20;
+    public int addHp = 50;    
+
     public int cardType = 0;
     //觸發的四種事件: 沒觸發事件、遭遇敵人、遭遇寶箱、遭遇隨機事件
     public int triggerType = 0;
@@ -197,13 +204,29 @@ public class PlayerManager : TSingletonMonoBehavior<PlayerManager>
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "enemy"){
             triggerType = 1;
+            Destroy(other.gameObject);
             Debug.Log("遭遇敵人!");
-        }else if(other.tag == "event"){
+        }else if(other.tag == "sword"){
             triggerType = 2;
+            Destroy(other.gameObject);
             Debug.Log("隨機事件!");
-        }else if(other.tag == "box"){
+        }else if(other.tag == "shield"){
             triggerType = 3;
+            Destroy(other.gameObject);
             Debug.Log("遭遇寶箱!");
+        }else if(other.tag == "event1"){
+            triggerType = 4;
+            Destroy(other.gameObject);
+            Debug.Log("遭遇隱藏事件1!");
+        }else if(other.tag == "event2"){
+            triggerType = 5;
+            Destroy(other.gameObject);
+            Debug.Log("遭遇隱藏事件2!");
+        }else if(other.tag == "event3"){
+            triggerType = 6;
+            Destroy(other.gameObject);
+            Debug.Log("遭遇隱藏事件3!");
         }
+        
     }
 }
