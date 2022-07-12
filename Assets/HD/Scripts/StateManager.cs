@@ -10,9 +10,13 @@ public enum StateDef
 	chooseCard,
 	playerMove,
     encounter,
+    boss,
+    end
 }
 
 public class StateManager : TSingletonMonoBehavior<StateManager>{
+    //玩家死亡
+    public bool playerDead = false;
     //玩家的總回和數
     public int level = 20;
     public bool DestroyCard = false; 
@@ -39,7 +43,9 @@ public class StateManager : TSingletonMonoBehavior<StateManager>{
         states.Add(StateDef.idle, new Idle(this));
         states.Add(StateDef.chooseCard, new ChooseCard(this));
         states.Add(StateDef.playerMove, new PlayerMove(this));
-        states.Add(StateDef. encounter, new Encounter(this));
+        states.Add(StateDef.encounter, new Encounter(this));
+        states.Add(StateDef.boss, new Boss(this));
+        states.Add(StateDef.end, new End(this));
         //默認狀態為選擇卡牌
         TransitionState(StateDef.idle);
     }
@@ -116,7 +122,9 @@ public class ChooseCard:IState{
 	}
 
 	public virtual void OnUpdate(){
-        
+        if(StateManager.Instance.level <= 0 || StateManager.Instance.playerDead ){
+            StateManager.Instance.TransitionState(StateDef.end);
+        }
         //如果點選卡牌的話           
         if(StateManager.Instance.ButtonClick){
             /*
@@ -148,8 +156,9 @@ public class ChooseCard:IState{
     }
 
 	public virtual void OnExit(){
-        Debug.Log("離開卡牌生成事件");
+        Debug.Log("離開卡牌生成事件");        
         StateManager.Instance.ButtonClick = false;
+        CardManager.Instance.DeleteCard();
         //其他選擇卡牌破壞
         //StateManager.Instance.DestroyCard = true;
     }
@@ -188,6 +197,9 @@ public class PlayerMove:IState{
 	}
 
 	public virtual void OnUpdate(){
+        if(StateManager.Instance.level <= 0 || StateManager.Instance.playerDead ){
+            StateManager.Instance.TransitionState(StateDef.end);
+        }
         //如果 moveComplete == true 進行到Encounter State
         if(Player.Instance.triggerType == 1 || Player.Instance.triggerType == 2 ||Player.Instance.triggerType == 3 ||Player.Instance.triggerType == 4||Player.Instance.triggerType == 5||Player.Instance.triggerType == 6){
             StateManager.Instance.TransitionState(StateDef.encounter);            
@@ -256,6 +268,9 @@ public class Encounter:IState{
 	}
 
 	public virtual void OnUpdate(){
+        if(StateManager.Instance.level <= 0 || StateManager.Instance.playerDead ){
+            StateManager.Instance.TransitionState(StateDef.end);
+        }
         //如果事件動畫執行完畢 回到 ChooseCard State
         if(StateManager.Instance.eventComplete){
             Debug.Log("事件回到選擇卡片");
@@ -266,6 +281,50 @@ public class Encounter:IState{
 	public virtual void OnExit(){
         StateManager.Instance.eventComplete = false;
         Player.Instance.triggerType = 0;
+    }
+}
+
+public class Boss:IState{
+
+	protected StateManager manager;
+
+    public Boss(StateManager manager){
+        this.manager = manager;
+    } 
+
+	public virtual void OnEnter(){
+        
+	}
+
+	public virtual void OnUpdate(){
+        if(StateManager.Instance.level <= 0 || StateManager.Instance.playerDead ){
+            StateManager.Instance.TransitionState(StateDef.end);
+        }
+    }
+
+	public virtual void OnExit(){
+        
+    }
+}
+
+public class End:IState{
+
+	protected StateManager manager;
+
+    public End(StateManager manager){
+        this.manager = manager;
+    } 
+
+	public virtual void OnEnter(){
+        Debug.Log("結算畫面");
+	}
+
+	public virtual void OnUpdate(){
+        
+    }
+
+	public virtual void OnExit(){
+        
     }
 }
 

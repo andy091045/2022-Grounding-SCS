@@ -109,6 +109,9 @@ public class Player : TSingletonMonoBehavior<Player>
             triggerType = 6;
             Destroy(other.gameObject);
             Debug.Log("遭遇隱藏事件3!");
+        }else if(other.tag == "airWall"){           
+            
+            Debug.Log("玩家死亡");
         }
         
     }
