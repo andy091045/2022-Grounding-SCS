@@ -90,9 +90,8 @@ public class ChooseCard:IState{
 
 	public virtual void OnEnter(){
 		//卡牌飛入動畫
-
+        Debug.Log("進入卡牌生成事件");
         //生成5張卡牌
-
         
         for (int i = 0; i < StateManager.Instance.cardNumber; i++)
         {
@@ -138,6 +137,7 @@ public class PlayerMove:IState{
 
 	public virtual void OnEnter(){
 		//角色進行移動
+        Debug.Log("進入角色移動事件");
         //角色移動完成 所以 bool moveComplete = true; 
         if(!StateManager.Instance.moveComplete){
             if(StateManager.Instance.way == "Forward"){
