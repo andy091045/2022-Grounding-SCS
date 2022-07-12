@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using HD.Singleton;
 
-public class PlayerManager : MonoBehaviour
-{
+public class PlayerManager : TSingletonMonoBehavior<PlayerManager>
+{    
+    
+    public int cardType = 0;
+    public bool triggerEnemy = false;
     public float PlayerSpeed = 0.02f;
     public float PlayerMoveTime = 0.5f;
     string beforeWay = "Forward";
@@ -19,8 +23,29 @@ public class PlayerManager : MonoBehaviour
     {
         
     }
+
+    public void ButtonForward(){     
+        StateManager.Instance.ButtonClick = true;
+        cardType = 0;
+    }    
+    public void ButtonBack(){
+       
+        StateManager.Instance.ButtonClick = true;
+        cardType = 1;
+    } 
+    public void ButtonRight(){
+        
+        StateManager.Instance.ButtonClick = true;
+        cardType = 2;
+    } 
+    public void ButtonLeft(){
+       
+        StateManager.Instance.ButtonClick = true;
+        cardType = 3;
+    } 
+
     
-    public void TurnForward(){        
+    public void TurnForward(){               
         StartCoroutine(Move(PlayerMoveTime, "Forward"));
         beforeWay = "Forward";
     }
@@ -94,20 +119,16 @@ public class PlayerManager : MonoBehaviour
         if(beforeWay == "Forward"){
             switch (way)
             {
-                case "Forward":
-                    Debug.Log("不用旋轉");
+                case "Forward":                    
                     break;
-                case "Back":
-                    Debug.Log("轉180度");
+                case "Back":                    
                     this.transform.Rotate(0, 180.0f, 0);                    
                     break;
                 case "Right":
-                    this.transform.Rotate(0, 90.0f, 0);
-                    Debug.Log("轉90度");
+                    this.transform.Rotate(0, 90.0f, 0);                    
                     break;
                 case "Left":
-                    this.transform.Rotate(0, 270.0f, 0);
-                    Debug.Log("轉270度");
+                    this.transform.Rotate(0, 270.0f, 0);                    
                     break;
                 default:
                     Debug.Log("Default case");
@@ -116,20 +137,16 @@ public class PlayerManager : MonoBehaviour
         }else if(beforeWay == "Back"){
             switch (way)
             {
-                case "Forward":
-                    Debug.Log("轉180度");
+                case "Forward":                    
                     this.transform.Rotate(0, 180.0f, 0);   
                     break;
-                case "Back":
-                    Debug.Log("不用旋轉");                    
+                case "Back":                                        
                     break;
                 case "Right":
-                    this.transform.Rotate(0, 270.0f, 0);
-                    Debug.Log("轉270度");
+                    this.transform.Rotate(0, 270.0f, 0);                    
                     break;
                 case "Left":
-                    this.transform.Rotate(0, 90.0f, 0);
-                    Debug.Log("轉90度");                    
+                    this.transform.Rotate(0, 90.0f, 0);                                       
                     break;
                 default:
                     Debug.Log("Default case");
@@ -139,18 +156,14 @@ public class PlayerManager : MonoBehaviour
             switch (way)
             {
                 case "Forward":
-                    this.transform.Rotate(0, 270.0f, 0);
-                    Debug.Log("轉270度");                       
+                    this.transform.Rotate(0, 270.0f, 0);                                           
                     break;
                 case "Back":
-                    this.transform.Rotate(0, 90.0f, 0);
-                    Debug.Log("轉90度");
+                    this.transform.Rotate(0, 90.0f, 0);                    
                     break;
-                case "Right":
-                    Debug.Log("不用旋轉");                         
+                case "Right":                                             
                     break;
-                case "Left":
-                    Debug.Log("轉180度");
+                case "Left":                    
                     this.transform.Rotate(0, 180.0f, 0);                                       
                     break;
                 default:
@@ -161,19 +174,15 @@ public class PlayerManager : MonoBehaviour
             switch (way)
             {
                 case "Forward":
-                    this.transform.Rotate(0, 90.0f, 0);
-                    Debug.Log("轉90度");
+                    this.transform.Rotate(0, 90.0f, 0);                    
                     break;
                 case "Back":
-                    this.transform.Rotate(0, 270.0f, 0);
-                    Debug.Log("轉270度");
+                    this.transform.Rotate(0, 270.0f, 0);                    
                     break;
-                case "Right":
-                    Debug.Log("轉180度");
+                case "Right":                    
                     this.transform.Rotate(0, 180.0f, 0);                   
                     break;
-                case "Left":
-                    Debug.Log("不用旋轉");                                    
+                case "Left":                                                        
                     break;
                 default:
                     Debug.Log("Default case");
@@ -182,5 +191,12 @@ public class PlayerManager : MonoBehaviour
         }
         
         
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(other.tag == "enemy"){
+            triggerEnemy = true;
+            Debug.Log("遭遇敵人!");
+        }
     }
 }

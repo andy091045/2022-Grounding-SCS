@@ -200,9 +200,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 9190813501147898316, guid: e4fa40ec4a5938c41b27e5882434aa82, type: 3}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
-        m_MethodName: TurnBack
+        m_MethodName: ButtonBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

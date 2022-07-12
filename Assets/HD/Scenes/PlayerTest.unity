@@ -321,6 +321,49 @@ MonoBehaviour:
   downBorder: -10
   rightBorder: 10
   leftBorder: -10
+--- !u!1 &793218487
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 793218489}
+  - component: {fileID: 793218488}
+  m_Layer: 0
+  m_Name: CardManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &793218488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793218487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68842cc99af3e5f48afc074c5edb1d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &793218489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793218487}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &883654714
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,6 +487,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b4d4507415321f408f8068cfc0c97d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveComplete: 0
+  way: 
   startCardPosition: {fileID: 1024688642}
   cardsSpace: 10
   cardNumber: 5
@@ -484,7 +529,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  ForwardObjectToPool: {fileID: 1437356201488984420, guid: 4ce98a69c2470db468b01b3e23738b37, type: 3}
+  ForwardObjectToPool: {fileID: 4252880281883830807, guid: 6124c019c18ee94458cf3b40ee552fd5, type: 3}
   BackPooledObjects:
   - {fileID: 0}
   - {fileID: 0}
@@ -590,6 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafa1feb7ab3fd6469cdd88bcd6c5471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerEnemy: 0
   PlayerSpeed: 10
   PlayerMoveTime: 2
 --- !u!54 &1346670775
@@ -678,7 +724,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1346670773}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.56, z: 11.45}
+  m_LocalPosition: {x: 0, y: 1, z: 11}
   m_LocalScale: {x: 2, y: 3, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
