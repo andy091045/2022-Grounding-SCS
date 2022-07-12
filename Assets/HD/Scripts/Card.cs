@@ -13,9 +13,11 @@ public class Card : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if(StateManager.Instance.DestroyCard == true){
             Destroy(this.gameObject);
         }
+        */
          
     }
 }

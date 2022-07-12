@@ -108,7 +108,7 @@ public class ChooseCard:IState{
         for (int i = 0; i < StateManager.Instance.cardNumber; i++)
         {
             //隨機生成上or下or左or右
-            int cardType = Random.Range(0,3); 
+            int cardType = Random.Range(0,4); 
             //int cardType = 0;
             CardManager.Instance.CreateCard(cardType);
         }
@@ -119,6 +119,7 @@ public class ChooseCard:IState{
         
         //如果點選卡牌的話           
         if(StateManager.Instance.ButtonClick){
+            /*
             if(PlayerManager.Instance.cardType == 0 ){ 
                 StateManager.Instance.way = "Forward";           
                 StateManager.Instance.TransitionState(StateDef.playerMove);        
@@ -131,13 +132,19 @@ public class ChooseCard:IState{
             }else if(PlayerManager.Instance.cardType == 3 ){ 
                 StateManager.Instance.way = "Left";           
                 StateManager.Instance.TransitionState(StateDef.playerMove);           
-            }                   
+            }  
+            */
+            StateManager.Instance.TransitionState(StateDef.playerMove);                  
         } 
-
+/*
         if(PlayerManager.Instance.triggerType == 1 || PlayerManager.Instance.triggerType == 2 ||PlayerManager.Instance.triggerType == 3 ||PlayerManager.Instance.triggerType == 4||PlayerManager.Instance.triggerType == 5||PlayerManager.Instance.triggerType == 6){
             StateManager.Instance.TransitionState(StateDef.encounter);            
         }   
-              
+*/
+
+        if(Player.Instance.triggerType == 1 || Player.Instance.triggerType == 2 ||Player.Instance.triggerType == 3 ||Player.Instance.triggerType == 4||Player.Instance.triggerType == 5||Player.Instance.triggerType == 6){
+            StateManager.Instance.TransitionState(StateDef.encounter);            
+        } 
     }
 
 	public virtual void OnExit(){
@@ -160,6 +167,7 @@ public class PlayerMove:IState{
 		//角色進行移動
         Debug.Log("進入移動事件");
         //角色移動完成 所以 bool moveComplete = true; 
+        /*
         if(!StateManager.Instance.moveComplete){
             if(StateManager.Instance.way == "Forward"){
                 PlayerManager.Instance.TurnForward();
@@ -174,13 +182,14 @@ public class PlayerMove:IState{
                 PlayerManager.Instance.TurnLeft();
                 StateManager.Instance.moveComplete = true;
             }
-        }        
-        
+        } 
+        */       
+        StateManager.Instance.moveComplete = true;
 	}
 
 	public virtual void OnUpdate(){
         //如果 moveComplete == true 進行到Encounter State
-        if(PlayerManager.Instance.triggerType == 1 || PlayerManager.Instance.triggerType == 2 ||PlayerManager.Instance.triggerType == 3 ||PlayerManager.Instance.triggerType == 4||PlayerManager.Instance.triggerType == 5||PlayerManager.Instance.triggerType == 6){
+        if(Player.Instance.triggerType == 1 || Player.Instance.triggerType == 2 ||Player.Instance.triggerType == 3 ||Player.Instance.triggerType == 4||Player.Instance.triggerType == 5||Player.Instance.triggerType == 6){
             StateManager.Instance.TransitionState(StateDef.encounter);            
         }
 
@@ -211,35 +220,35 @@ public class Encounter:IState{
         Debug.Log("進入事件");
 		//判斷是否有觸發事件
         //如果碰到隨機事件
-        if(PlayerManager.Instance.triggerType == 1){
+        if(Player.Instance.triggerType == 1){
             int decreaseHp = Random.Range(15,30);
-            PlayerManager.Instance.hp -= decreaseHp;
-            PlayerManager.Instance.atk += PlayerManager.Instance.addAtk;
+            Player.Instance.hp -= decreaseHp;
+            Player.Instance.atk += Player.Instance.addAtk;
             StateManager.Instance.eventComplete = true;
         }
         //如果碰到寶箱寶劍
-        if(PlayerManager.Instance.triggerType == 2){            
-            PlayerManager.Instance.atk += (PlayerManager.Instance.addAtk * 3);
+        if(Player.Instance.triggerType == 2){            
+            Player.Instance.atk += (Player.Instance.addAtk * 3);
             StateManager.Instance.eventComplete = true;
         }
         //如果碰到寶箱盾牌
-        if(PlayerManager.Instance.triggerType == 3){            
-            PlayerManager.Instance.def += PlayerManager.Instance.addDef;
+        if(Player.Instance.triggerType == 3){            
+            Player.Instance.def += Player.Instance.addDef;
             StateManager.Instance.eventComplete = true;
         }
         //如果碰到隱藏事件1  
-        if(PlayerManager.Instance.triggerType == 4){            
-            PlayerManager.Instance.hp += PlayerManager.Instance.addHp;
+        if(Player.Instance.triggerType == 4){            
+            Player.Instance.hp += Player.Instance.addHp;
             StateManager.Instance.eventComplete = true;
         } 
         //如果碰到隱藏事件2  
-        if(PlayerManager.Instance.triggerType == 5){            
+        if(Player.Instance.triggerType == 5){            
             int decreaseHp = Random.Range(15,30);
-            PlayerManager.Instance.hp -= decreaseHp;
+            Player.Instance.hp -= decreaseHp;
             StateManager.Instance.eventComplete = true;
         }
         //如果碰到隱藏事件3 尚未做 
-        if(PlayerManager.Instance.triggerType == 6){   
+        if(Player.Instance.triggerType == 6){   
             StateManager.Instance.eventComplete = true;         
             //int decreaseHp = Random.Range(15,30);
             //PlayerManager.Instance.hp -= decreaseHp;
@@ -256,7 +265,7 @@ public class Encounter:IState{
 
 	public virtual void OnExit(){
         StateManager.Instance.eventComplete = false;
-        PlayerManager.Instance.triggerType = 0;
+        Player.Instance.triggerType = 0;
     }
 }
 

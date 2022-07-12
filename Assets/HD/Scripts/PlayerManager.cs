@@ -18,20 +18,9 @@ public class PlayerManager : TSingletonMonoBehavior<PlayerManager>
     public int triggerType = 0;
     public float PlayerSpeed = 0.02f;
     public float PlayerMoveTime = 0.5f;
-    string beforeWay = "Forward";
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-         
-    }
+    string beforeWay = "Forward";  
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+/*
     public void ButtonForward(){     
         StateManager.Instance.ButtonClick = true;
         cardType = 0;
@@ -51,7 +40,7 @@ public class PlayerManager : TSingletonMonoBehavior<PlayerManager>
         StateManager.Instance.ButtonClick = true;
         cardType = 3;
     } 
-
+*/
     
     public void TurnForward(){               
         StartCoroutine(Move(PlayerMoveTime, "Forward"));
@@ -74,7 +63,7 @@ public class PlayerManager : TSingletonMonoBehavior<PlayerManager>
     }
 
     private IEnumerator Move (float time, string way){
-        PlayerRotate(way);
+        //PlayerRotate(way);
         if(way == "Forward"){
             float t = 0;
             while(true)
