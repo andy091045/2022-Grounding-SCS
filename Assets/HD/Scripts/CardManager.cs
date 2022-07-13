@@ -4,6 +4,9 @@ using UnityEngine;
 using HD.Singleton;
 public class CardManager : TSingletonMonoBehavior<CardManager>
 {
+    //是否滿五張
+    int fullCard = 0;
+    GameObject[] objects = new GameObject[10];
     public List<GameObject> CardLibrary;
     GameObject container;
     public GameObject[] Cardpos;
@@ -22,14 +25,21 @@ public class CardManager : TSingletonMonoBehavior<CardManager>
     // Update is called once per frame
     void Update()
     {
-        if (_cardNPC == true)
+        if (fullCard == 5)
         {
-            GameObject[] objects = GameObject.FindGameObjectsWithTag("Card");
-            objects[0].transform.position = Cardpos[0].transform.position;
-            objects[1].transform.position = Cardpos[1].transform.position;
-            objects[2].transform.position = Cardpos[2].transform.position;
-            objects[3].transform.position = Cardpos[3].transform.position;
-            objects[4].transform.position = Cardpos[4].transform.position;
+            objects = GameObject.FindGameObjectsWithTag("Card");
+            for (int i = 0; i < 5; i++)
+            {
+                if(objects[i] != null){
+                    objects[i].transform.position = Cardpos[i].transform.position;
+                }
+            }
+            //objects[0].transform.position = Cardpos[0].transform.position;
+            //objects[1].transform.position = Cardpos[1].transform.position;
+            //objects[2].transform.position = Cardpos[2].transform.position;
+            //objects[3].transform.position = Cardpos[3].transform.position;
+            //objects[4].transform.position = Cardpos[4].transform.position; 
+            fullCard = 0;          
         }
     }
 
@@ -49,11 +59,15 @@ public class CardManager : TSingletonMonoBehavior<CardManager>
             GameObject cardNPC = ObjectPool.Instance.GetForwardPooledObject();
             if(cardNPC == null){
                 Debug.Log("生成有問題");                
-            }else{
+            }
+            else
+            {
                 cardNPC.transform.parent = container.transform;
+                cardNPC.transform.position = Cardpos[0].transform.position;
                 cardNPC.SetActive(true); 
                 CardLibrary.Add(cardNPC); 
-                _cardNPC = true;            
+                //_cardNPC = true;  
+                fullCard++;          
             }
             
         }else if(cardType == 1){
@@ -61,19 +75,22 @@ public class CardManager : TSingletonMonoBehavior<CardManager>
             cardNPC.transform.parent = container.transform;
             cardNPC.SetActive(true); 
             CardLibrary.Add(cardNPC); 
-            _cardNPC = true;          
+             //_cardNPC = true;  
+                fullCard++;          
         }else if(cardType == 2){
             GameObject cardNPC = ObjectPool.Instance.GetRightPooledObject();
             cardNPC.transform.parent = container.transform;
             cardNPC.SetActive(true);  
             CardLibrary.Add(cardNPC); 
-            _cardNPC = true;         
+             //_cardNPC = true;  
+                fullCard++;         
         }else if(cardType == 3){
             GameObject cardNPC = ObjectPool.Instance.GetLeftPooledObject();
             cardNPC.transform.parent = container.transform;
             cardNPC.SetActive(true);  
             CardLibrary.Add(cardNPC);  
-            _cardNPC = true;        
+             //_cardNPC = true;  
+                fullCard++;        
         }
     }
 }

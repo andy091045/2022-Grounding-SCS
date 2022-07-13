@@ -14,6 +14,7 @@ TagManager:
   - event3
   - airWall
   - Card
+  - bossWall
   layers:
   - Default
   - TransparentFX

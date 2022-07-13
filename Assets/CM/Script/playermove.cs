@@ -10,6 +10,7 @@ public class playermove : MonoBehaviour
     public float playerSpeed = 2.0f;
     public float jumpHeight = 1.0f;
     public float gravityValue = -9.81f;
+    public Transform _Camera;
 
     private void Start()
     {
@@ -18,6 +19,8 @@ public class playermove : MonoBehaviour
 
     void Update()
     {
+        //transform.LookAt(_Camera);
+
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0)
         {

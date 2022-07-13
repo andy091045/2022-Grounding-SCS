@@ -7,19 +7,20 @@ using HD.Singleton;
 public enum StateDef
 {
     idle,
-	chooseCard,
-	playerMove,
+    chooseCard,
+    playerMove,
     encounter,
     boss,
     end
 }
 
-public class StateManager : TSingletonMonoBehavior<StateManager>{
+public class StateManager : TSingletonMonoBehavior<StateManager>
+{
     //玩家死亡
     public bool playerDead = false;
     //玩家的總回和數
     public int level = 20;
-    public bool DestroyCard = false; 
+    public bool DestroyCard = false;
 
 
     //判斷是否有按按鈕
@@ -39,7 +40,8 @@ public class StateManager : TSingletonMonoBehavior<StateManager>{
     public int cardNumber = 5;
     public IState currentState;
     private Dictionary<StateDef, IState> states = new Dictionary<StateDef, IState>();
-    private void Awake(){
+    private void Awake()
+    {
         states.Add(StateDef.idle, new Idle(this));
         states.Add(StateDef.chooseCard, new ChooseCard(this));
         states.Add(StateDef.playerMove, new PlayerMove(this));
@@ -50,15 +52,19 @@ public class StateManager : TSingletonMonoBehavior<StateManager>{
         TransitionState(StateDef.idle);
     }
 
-    private void Update(){
+    private void Update()
+    {
         currentState.OnUpdate();
-        if(Input.GetKeyDown(KeyCode.W)){            
-            TransitionState(StateDef.chooseCard);            
-        }        
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            TransitionState(StateDef.chooseCard);
+        }
     }
 
-    public void TransitionState(StateDef type){
-        if(currentState != null){
+    public void TransitionState(StateDef type)
+    {
+        if (currentState != null)
+        {
             currentState.OnExit();
         }
         currentState = states[type];
@@ -66,67 +72,80 @@ public class StateManager : TSingletonMonoBehavior<StateManager>{
     }
 }
 
-public interface IState{    
-	//void OnEnter(StateManager manager);
+public interface IState
+{
+    //void OnEnter(StateManager manager);
     void OnEnter();
-	void OnUpdate();
-	void OnExit();
+    void OnUpdate();
+    void OnExit();
 }
 
-public class Idle:IState{
+public class Idle : IState
+{
 
-	protected StateManager manager;
+    protected StateManager manager;
 
-    public Idle(StateManager manager){
+    public Idle(StateManager manager)
+    {
         this.manager = manager;
-    } 
+    }
 
-	public virtual void OnEnter(){
-		
-	}
-
-	public virtual void OnUpdate(){
+    public virtual void OnEnter()
+    {
 
     }
 
-	public virtual void OnExit(){
+    public virtual void OnUpdate()
+    {
+
+    }
+
+    public virtual void OnExit()
+    {
 
     }
 }
 
-public class ChooseCard:IState{
+public class ChooseCard : IState
+{
 
-	protected StateManager manager;
+    protected StateManager manager;
 
-    public ChooseCard(StateManager manager){
+    public ChooseCard(StateManager manager)
+    {
         this.manager = manager;
-    } 
+    }
 
-	public virtual void OnEnter(){
+    public virtual void OnEnter()
+    {
         StateManager.Instance.level -= 1;
-        if( StateManager.Instance.level == 0){
+        if (StateManager.Instance.level == 0)
+        {
             Debug.Log("GameOver !");
         }
-		//卡牌飛入動畫
+        //卡牌飛入動畫
         Debug.Log("進入卡牌生成事件");
         //生成5張卡牌
-        
-        for (int i = 0; i < StateManager.Instance.cardNumber; i++)
+
+        for (int i = 0; i < (StateManager.Instance.cardNumber - 1); i++)
         {
             //隨機生成上or下or左or右
-            int cardType = Random.Range(0,4); 
+            int cardType = Random.Range(0, 4);
             //int cardType = 0;
             CardManager.Instance.CreateCard(cardType);
         }
-              
-	}
+        CardManager.Instance.CreateCard(0);
+    }
 
-	public virtual void OnUpdate(){
-        if(StateManager.Instance.level <= 0 || StateManager.Instance.playerDead ){
+    public virtual void OnUpdate()
+    {
+        if (StateManager.Instance.level <= 0 || StateManager.Instance.playerDead)
+        {
             StateManager.Instance.TransitionState(StateDef.end);
         }
         //如果點選卡牌的話           
-        if(StateManager.Instance.ButtonClick){
+        if (StateManager.Instance.ButtonClick)
+        {
             /*
             if(PlayerManager.Instance.cardType == 0 ){ 
                 StateManager.Instance.way = "Forward";           
@@ -142,21 +161,23 @@ public class ChooseCard:IState{
                 StateManager.Instance.TransitionState(StateDef.playerMove);           
             }  
             */
-            StateManager.Instance.TransitionState(StateDef.playerMove);                  
-        } 
-/*
-        if(PlayerManager.Instance.triggerType == 1 || PlayerManager.Instance.triggerType == 2 ||PlayerManager.Instance.triggerType == 3 ||PlayerManager.Instance.triggerType == 4||PlayerManager.Instance.triggerType == 5||PlayerManager.Instance.triggerType == 6){
-            StateManager.Instance.TransitionState(StateDef.encounter);            
-        }   
-*/
+            StateManager.Instance.TransitionState(StateDef.playerMove);
+        }
+        /*
+                if(PlayerManager.Instance.triggerType == 1 || PlayerManager.Instance.triggerType == 2 ||PlayerManager.Instance.triggerType == 3 ||PlayerManager.Instance.triggerType == 4||PlayerManager.Instance.triggerType == 5||PlayerManager.Instance.triggerType == 6){
+                    StateManager.Instance.TransitionState(StateDef.encounter);            
+                }   
+        */
 
-        if(Player.Instance.triggerType == 1 || Player.Instance.triggerType == 2 ||Player.Instance.triggerType == 3 ||Player.Instance.triggerType == 4||Player.Instance.triggerType == 5||Player.Instance.triggerType == 6){
-            StateManager.Instance.TransitionState(StateDef.encounter);            
-        } 
+        if (Player.Instance.triggerType == 1 || Player.Instance.triggerType == 2 || Player.Instance.triggerType == 3 || Player.Instance.triggerType == 4 || Player.Instance.triggerType == 5 || Player.Instance.triggerType == 6)
+        {
+            StateManager.Instance.TransitionState(StateDef.encounter);
+        }
     }
 
-	public virtual void OnExit(){
-        Debug.Log("離開卡牌生成事件");        
+    public virtual void OnExit()
+    {
+        Debug.Log("離開卡牌生成事件");
         StateManager.Instance.ButtonClick = false;
         CardManager.Instance.DeleteCard();
         //其他選擇卡牌破壞
@@ -164,16 +185,19 @@ public class ChooseCard:IState{
     }
 }
 
-public class PlayerMove:IState{
+public class PlayerMove : IState
+{
 
-	protected StateManager manager;
+    protected StateManager manager;
 
-    public PlayerMove(StateManager manager){
+    public PlayerMove(StateManager manager)
+    {
         this.manager = manager;
-    } 
+    }
 
-	public virtual void OnEnter(){
-		//角色進行移動
+    public virtual void OnEnter()
+    {
+        //角色進行移動
         Debug.Log("進入移動事件");
         //角色移動完成 所以 bool moveComplete = true; 
         /*
@@ -192,26 +216,31 @@ public class PlayerMove:IState{
                 StateManager.Instance.moveComplete = true;
             }
         } 
-        */       
+        */
         StateManager.Instance.moveComplete = true;
-	}
+    }
 
-	public virtual void OnUpdate(){
-        if(StateManager.Instance.level <= 0 || StateManager.Instance.playerDead ){
+    public virtual void OnUpdate()
+    {
+        if (StateManager.Instance.level <= 0 || StateManager.Instance.playerDead)
+        {
             StateManager.Instance.TransitionState(StateDef.end);
         }
         //如果 moveComplete == true 進行到Encounter State
-        if(Player.Instance.triggerType == 1 || Player.Instance.triggerType == 2 ||Player.Instance.triggerType == 3 ||Player.Instance.triggerType == 4||Player.Instance.triggerType == 5||Player.Instance.triggerType == 6){
-            StateManager.Instance.TransitionState(StateDef.encounter);            
+        if (Player.Instance.triggerType == 1 || Player.Instance.triggerType == 2 || Player.Instance.triggerType == 3 || Player.Instance.triggerType == 4 || Player.Instance.triggerType == 5 || Player.Instance.triggerType == 6)
+        {
+            StateManager.Instance.TransitionState(StateDef.encounter);
         }
 
-        if(StateManager.Instance.moveComplete == true){
-            Debug.Log("回到選擇卡牌");            
+        if (StateManager.Instance.moveComplete == true)
+        {
+            Debug.Log("回到選擇卡牌");
             StateManager.Instance.TransitionState(StateDef.chooseCard);
-        }    
+        }
     }
 
-	public virtual void OnExit(){
+    public virtual void OnExit()
+    {
         StateManager.Instance.moveComplete = false;
         Debug.Log("離開移動事件");
         //StateManager.Instance.TransitionState(StateDef.chooseCard);
@@ -220,18 +249,22 @@ public class PlayerMove:IState{
     }
 }
 
-public class Encounter:IState{
+public class Encounter : IState
+{
 
-	protected StateManager manager;
+    protected StateManager manager;
 
-    public Encounter(StateManager manager){
+    public Encounter(StateManager manager)
+    {
         this.manager = manager;
-    } 
+    }
 
-	public virtual void OnEnter(){
+    public virtual void OnEnter()
+    {
         Debug.Log("進入事件");
-		//判斷是否有觸發事件
+        //判斷是否有觸發事件
         //如果碰到隨機事件
+        /*
         if(Player.Instance.triggerType == 1){
             int decreaseHp = Random.Range(15,30);
             Player.Instance.hp -= decreaseHp;
@@ -257,74 +290,91 @@ public class Encounter:IState{
         if(Player.Instance.triggerType == 5){            
             int decreaseHp = Random.Range(15,30);
             Player.Instance.hp -= decreaseHp;
-            StateManager.Instance.eventComplete = true;
+            StateManager.Instance.eventComplete = true;            
         }
         //如果碰到隱藏事件3 尚未做 
         if(Player.Instance.triggerType == 6){   
             StateManager.Instance.eventComplete = true;         
             //int decreaseHp = Random.Range(15,30);
             //PlayerManager.Instance.hp -= decreaseHp;
-        }     
-	}
+        }   
+*/
+        StateManager.Instance.eventComplete = true;
+    }
 
-	public virtual void OnUpdate(){
-        if(StateManager.Instance.level <= 0 || StateManager.Instance.playerDead ){
+    public virtual void OnUpdate()
+    {
+        if (StateManager.Instance.level <= 0 || StateManager.Instance.playerDead)
+        {
             StateManager.Instance.TransitionState(StateDef.end);
         }
         //如果事件動畫執行完畢 回到 ChooseCard State
-        if(StateManager.Instance.eventComplete){
+        if (StateManager.Instance.eventComplete)
+        {
             Debug.Log("事件回到選擇卡片");
             StateManager.Instance.TransitionState(StateDef.chooseCard);
         }
     }
 
-	public virtual void OnExit(){
+    public virtual void OnExit()
+    {
         StateManager.Instance.eventComplete = false;
         Player.Instance.triggerType = 0;
     }
 }
 
-public class Boss:IState{
+public class Boss : IState
+{
 
-	protected StateManager manager;
+    protected StateManager manager;
 
-    public Boss(StateManager manager){
+    public Boss(StateManager manager)
+    {
         this.manager = manager;
-    } 
+    }
 
-	public virtual void OnEnter(){
-        
-	}
+    public virtual void OnEnter()
+    {
 
-	public virtual void OnUpdate(){
-        if(StateManager.Instance.level <= 0 || StateManager.Instance.playerDead ){
+    }
+
+    public virtual void OnUpdate()
+    {
+        if (StateManager.Instance.level <= 0 || StateManager.Instance.playerDead)
+        {
             StateManager.Instance.TransitionState(StateDef.end);
         }
     }
 
-	public virtual void OnExit(){
-        
+    public virtual void OnExit()
+    {
+
     }
 }
 
-public class End:IState{
+public class End : IState
+{
 
-	protected StateManager manager;
+    protected StateManager manager;
 
-    public End(StateManager manager){
+    public End(StateManager manager)
+    {
         this.manager = manager;
-    } 
-
-	public virtual void OnEnter(){
-        Debug.Log("結算畫面");
-	}
-
-	public virtual void OnUpdate(){
-        
     }
 
-	public virtual void OnExit(){
-        
+    public virtual void OnEnter()
+    {
+        Debug.Log("結算畫面");
+    }
+
+    public virtual void OnUpdate()
+    {
+
+    }
+
+    public virtual void OnExit()
+    {
+
     }
 }
 
