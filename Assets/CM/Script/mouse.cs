@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class mouse : MonoBehaviour
 {
+    public GameObject player;
     public float m_Speed = 0.05f;
     public float m_HighSpeed = 0.25f;
     const float s_VerticalSpeedBias = 0.5f;
@@ -13,6 +14,13 @@ public class mouse : MonoBehaviour
     void Update()
     {
         RelativeMovement(GetMouseLook(), GetDeltaMovement(GetSpeed()));
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            //Debug.Log("想做相機位置重置但沒做出來");
+            this.transform.position = player.transform.position + new Vector3(0.0f, 40.0f, -10.0f);
+          
+        }
     }
 
     private void RelativeMovement(Vector3 mouseLook, Vector3 deltaMovement)
@@ -75,4 +83,6 @@ public class mouse : MonoBehaviour
         }
         return Vector2.zero;
     }
+
+    
 }

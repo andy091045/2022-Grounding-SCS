@@ -5,6 +5,12 @@ using UnityEngine.UI;
 using HD.Singleton;
 public class Player : TSingletonMonoBehavior<Player>
 {
+    public Text text_add_atk;
+    public Text text_add_def;
+    public Text text_add_hp;
+    public Text text_des_hp;
+    public Text text_addatk_deshp;
+
     public int bossPower = 0;
     public int playerPower = 0;
     public float PlayerMoveTime = 2.0f;
@@ -14,9 +20,10 @@ public class Player : TSingletonMonoBehavior<Player>
     public int atk = 50;
     public int def = 30;
 
-    public int addAtk = 5;
-    public int addDef = 20;
-    public int addHp = 50;
+    public int addAtk;
+    public int addDef;
+    public int addHp;
+    public int desHp;
 
     public int subtractHp = 10;
 
@@ -171,53 +178,63 @@ private void Awake() {
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "enemy")
-        {
+        {   
+            desHp = Random.Range(20, 60);
+            addAtk = Random.Range(10, 40);
             triggerType = 1;
             Destroy(other.gameObject);
-            atk += Random.Range(10, 40);
-            hp -= Random.Range(30, 60);
+            atk += addAtk;
+            hp -= desHp;
             PlayerPowerState();
             Debug.Log("遭遇敵人!");
             Enemy_info.SetActive(true);
+            text_addatk_deshp.text = "HP - " +  desHp.ToString() + " " + "ATK + " + addAtk.ToString();
         }
         else if (other.tag == "sword")
         {
+            addAtk = 50;
             triggerType = 2;
             Destroy(other.gameObject);
-            atk += 50;
+            atk += addAtk;
             PlayerPowerState();
             Debug.Log("寶箱寶劍!");
             ATK_info.SetActive(true);
+            text_add_atk.text = "ATK + " + addAtk.ToString();
             iATK.color = new Color32(255, 255, 255, 255);
         }
         else if (other.tag == "shield")
         {
+            addDef = 40;
             triggerType = 3;
             Destroy(other.gameObject);
-            def += 40;
+            def += addDef;
             PlayerPowerState();
             Debug.Log("寶箱盾牌!");
             DEF_info.SetActive(true);
+            text_add_def.text = "DEF + " + addDef.ToString();
             iDEF.color = new Color32(255, 255, 255, 255);
         }
         else if (other.tag == "event1")
         {
+            addHp = Random.Range(50, 100);
             triggerType = 4;
             Destroy(other.gameObject);
-            hp += Random.Range(50, 80);
+            hp += addHp;
             PlayerPowerState();
             Debug.Log("隱藏事件1回血!");
             Event_HP_info.SetActive(true);
-            hp += addHp;
+            text_add_hp.text = "HP + " + addHp.ToString();          
         }
         else if (other.tag == "event2")
         {
+            desHp = 20;
             triggerType = 5;
             Destroy(other.gameObject);
-            hp -= 20;
+            hp -= desHp;
             PlayerPowerState();
             Debug.Log("隱藏事件2!減血");
             Trap_HP_info.SetActive(true);
+            text_des_hp.text = "HP - " + desHp.ToString();
         }
         else if (other.tag == "event3")
         {

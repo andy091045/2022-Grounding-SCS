@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class canvasAnimation : MonoBehaviour
 {
-    public GameObject ATK_info, DEF_info, Event_HP_info, Trap_HP_info, Enemy_info, Win_info, Lose_info;
+    public GameObject ATK_info, DEF_info, Event_HP_info, Trap_HP_info, Enemy_info, Win_info, Lose_info, _enter;
 
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +16,7 @@ public class canvasAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Enter();
     }
 
     public void CloseATKinfo()
@@ -47,6 +47,13 @@ public class canvasAnimation : MonoBehaviour
     public void ReTry()
     {
         Application.LoadLevel(Application.loadedLevel);
+    }
+
+    public void Enter()
+    {
+       if(Input.GetKeyDown(KeyCode.Return)){
+            _enter.SetActive(false);
+       }
     }
 
 }
